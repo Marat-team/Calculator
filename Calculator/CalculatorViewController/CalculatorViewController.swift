@@ -16,12 +16,18 @@ class CalculatorViewController: UIViewController {
                     red: 119/255,
                     green: 221/255,
                     blue: 231/255,
-                    alpha: 1),
-            title: "AC",
-            color: .black,
-            size: 35)
+                    alpha: 1))
         button.addTarget(self, action: #selector(buttonAcInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelAc: UILabel = {
+        let label = setupLabel(
+            text: "AC",
+            style: "Arial",
+            size: 35,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonPlusOfMinus: UIButton = {
@@ -35,7 +41,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "plus.forwardslash.minus",
                 size: 28).image,
-            color: .black)
+            colorTitle: .black)
         return button
     }()
     
@@ -50,7 +56,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "percent",
                 size: 28).image,
-            color: .black)
+            colorTitle: .black)
         return button
     }()
     
@@ -65,7 +71,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "divide",
                 size: 28).image,
-            color: .white,
+            colorTitle: .white,
             tag: 1)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
@@ -80,7 +86,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "7",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 7)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -96,7 +102,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "8",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 8)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -112,7 +118,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "9",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 9)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -130,7 +136,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "multiply",
                 size: 28).image,
-            color: .white,
+            colorTitle: .white,
             tag: 2)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
@@ -145,7 +151,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "4",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 4)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -161,7 +167,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "5",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 5)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -177,7 +183,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "6",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 6)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -195,7 +201,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "minus",
                 size: 28).image,
-            color: .white,
+            colorTitle: .white,
             tag: 3)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
@@ -210,7 +216,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "1",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 1)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -226,7 +232,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "2",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 2)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -242,7 +248,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: "3",
-            color: .black,
+            colorTitle: .black,
             size: 42,
             tag: 3)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
@@ -260,7 +266,7 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "plus",
                 size: 28).image,
-            color: .white,
+            colorTitle: .white,
             tag: 4)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
@@ -274,12 +280,18 @@ class CalculatorViewController: UIViewController {
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "0",
-            color: .black,
-            size: 42,
             tag: 0)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelZero: UILabel = {
+        let label = setupLabel(
+            text: "0",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonComma: UIButton = {
@@ -291,7 +303,7 @@ class CalculatorViewController: UIViewController {
                     blue: 139/255,
                     alpha: 1),
             title: ",",
-            color: .black,
+            colorTitle: .black,
             size: 42)
         return button
     }()
@@ -307,31 +319,32 @@ class CalculatorViewController: UIViewController {
             image: image(
                 image: "equal",
                 size: 28).image,
-            color: .white,
+            colorTitle: .white,
             tag: 5)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
     }()
     
     private lazy var labelResults: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont(name: "Kohinoor Bangla", size: 100)
-        label.textAlignment = .right
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
+        let label = setupLabel(
+            text: "0",
+            style: "Kohinoor Bangla",
+            size: 100,
+            alignment: .right,
+            color: .white)
         return label
     }()
     
     private let sizeButton: CGFloat = 78.75
     private var start = true
     private var calculate = false
+    private var tagButton = 0
     private var number: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDesign()
-        addSubviews(subview: buttonAc,
+        addSubviews(subviews: buttonAc,
                     buttonPlusOfMinus,
                     buttonPercent,
                     buttonDivision,
@@ -360,12 +373,19 @@ class CalculatorViewController: UIViewController {
             green: 36/255,
             blue: 92/255,
             alpha: 1)
+        
+        addSubviewOnbutton(label: labelAc, button: buttonAc)
+        addSubviewOnbutton(label: labelZero, button: buttonZero)
     }
     
-    private func addSubviews(subview: UIView...) {
-        subview.forEach { subview in
+    private func addSubviews(subviews: UIView...) {
+        subviews.forEach { subview in
             view.addSubview(subview)
         }
+    }
+    
+    private func addSubviewOnbutton(label: UILabel, button: UIButton) {
+        button.addSubview(label)
     }
     
     private func setConstraints() {
@@ -375,6 +395,12 @@ class CalculatorViewController: UIViewController {
             buttonAc.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonAc.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
+        
+        NSLayoutConstraint.activate([
+            labelAc.centerXAnchor.constraint(equalTo: buttonAc.centerXAnchor),
+            labelAc.centerYAnchor.constraint(equalTo: buttonAc.centerYAnchor)
+        ])
+        
         NSLayoutConstraint.activate([
             buttonPlusOfMinus.leadingAnchor.constraint(equalTo: buttonAc.trailingAnchor, constant: 15),
             buttonPlusOfMinus.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
@@ -488,6 +514,11 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            labelZero.centerXAnchor.constraint(equalTo: buttonOne.centerXAnchor),
+            labelZero.centerYAnchor.constraint(equalTo: buttonZero.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonComma.leadingAnchor.constraint(equalTo: buttonZero.trailingAnchor, constant: 15),
             buttonComma.topAnchor.constraint(equalTo: buttonThree.bottomAnchor, constant: 15),
             buttonComma.heightAnchor.constraint(equalToConstant: sizeButton),
@@ -509,21 +540,29 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonAcInput() {
-        guard !start else { return }
-        start.toggle()
+        resetLabelResults()
+        guard tagButton > 0 else { return }
+        setupButtonCalcPress(tag: tagButton)
+    }
+    
+    private func resetLabelResults() {
         labelResults.text = "0"
         labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
-        buttonAc.setTitle("AC", for: .normal)
+        labelAc.text = "AC"
     }
     
     @objc private func buttonNumbersInput(button: UIButton) {
         guard labelResults.text?.count ?? 0 < 9 else { return }
-        
-        numbersInput(tag: button.tag)
-        checkResetButtons()
-        
+        let tag = button.tag
         let count = labelResults.text?.count ?? 0
+        let text = labelResults.text ?? ""
         
+        numbersInput(tag: tag, text: text)
+        checkResetButtons()
+        numbersInputSizeText(count: count)
+    }
+    
+    private func numbersInputSizeText(count: Int) {
         switch count {
         case 7:
             labelResults.font = UIFont(name: "Kohinoor Bangla", size: 90)
@@ -535,17 +574,27 @@ class CalculatorViewController: UIViewController {
         }
     }
     
-    private func numbersInput(tag: Int) {
-        let text = "\(tag)"
+    private func numbersInput(tag: Int, text: String) {
         if start {
-            start.toggle()
-            buttonAc.setTitle("C", for: .normal)
-            labelResults.text = text
+            input(tag: tag)
         } else {
-            var value = labelResults.text ?? ""
-            value += text
-            labelResults.text = value
+            inputCountinue(tag: tag, text: text)
         }
+    }
+    
+    private func input(tag: Int) {
+        start.toggle()
+        print("start: \(start)")
+        labelResults.text = "\(tag)"
+        if labelAc.text == "AC" {
+            labelAc.text = "C"
+        }
+    }
+    
+    private func inputCountinue(tag: Int, text: String) {
+        var value = text
+        value += "\(tag)"
+        labelResults.text = value
     }
     
     private func checkResetButtons() {
@@ -559,51 +608,80 @@ class CalculatorViewController: UIViewController {
     
     @objc private func calc(button: UIButton) {
         let tag = button.tag
-        switch tag {
-        case 1:
-            division()
-        case 2:
-            multiplication()
-        case 3:
-            subtraction()
-        case 4:
-            summation()
-        default:
-            calcResult()
+        if tag < 5 {
+            calcButtons(tag: tag)
+        } else {
+            calcResult(tag: tagButton)
         }
     }
     
-    private func division() {
+    private func calcButtons(tag: Int) {
         let text = labelResults.text ?? ""
         number = Float(text) ?? 0
-        buttonCalcPress(button: buttonDivision)
-        start.toggle()
+        
+        checkResetButtons()
+        checkStart()
         checkCalc()
+        tagButton = tag
         
+        setupButtonCalcPress(tag: tag)
     }
     
-    private func multiplication() {
-        
-    }
-    
-    private func subtraction() {
-        
-    }
-    
-    private func summation() {
-        
-    }
-    
-    private func calcResult() {
+    private func calcResult(tag: Int) {
         let text = labelResults.text ?? ""
         let value = Float(text) ?? 0
+        
+        switch tag {
+        case 1: division(value: value)
+        case 2: multiplication(value: value)
+        case 3: subtraction(value: value)
+        default: summation(value: value)
+        }
+        
+        checkStart()
+    }
+    
+    private func division(value: Float) {
         let result = number / value
         labelResults.text = "\(result)"
+        number = result
+    }
+    
+    private func multiplication(value: Float) {
+        let result = number * value
+        labelResults.text = "\(result)"
+        number = result
+    }
+    
+    private func subtraction(value: Float) {
+        let result = number - value
+        labelResults.text = "\(result)"
+        number = result
+    }
+    
+    private func summation(value: Float) {
+        let result = number + value
+        labelResults.text = "\(result)"
+        number = result
+    }
+    
+    private func checkStart() {
+        guard !start else { return }
+        start.toggle()
+        print("start: \(start)")
     }
     
     private func checkCalc() {
-        if !calculate {
-            calculate.toggle()
+        guard !calculate else { return }
+        calculate.toggle()
+    }
+    
+    private func setupButtonCalcPress(tag: Int) {
+        switch tag {
+        case 1: buttonCalcPress(button: buttonDivision)
+        case 2: buttonCalcPress(button: buttonMultiplier)
+        case 3: buttonCalcPress(button: buttonMinus)
+        default: buttonCalcPress(button: buttonPlus)
         }
     }
     
@@ -632,13 +710,13 @@ extension CalculatorViewController {
     private func setupButton(backgroundColor: UIColor,
                              title: String? = nil,
                              image: UIImage? = nil,
-                             color: UIColor,
+                             colorTitle: UIColor? = nil,
                              size: CGFloat? = nil,
                              tag: Int? = nil) -> UIButton {
         let button = UIButton(type: .system)
         button.backgroundColor = backgroundColor
         button.setTitle(title, for: .normal)
-        button.tintColor = color
+        button.tintColor = colorTitle ?? .clear
         button.titleLabel?.font = UIFont(name: "Arial", size: size ?? 0)
         button.layer.cornerRadius = corner(size: sizeButton)
         button.setImage(image, for: .normal)
@@ -662,5 +740,18 @@ extension CalculatorViewController {
         let combined = bold.applying(size)
         imageView.image = UIImage(systemName: image, withConfiguration: combined)
         return imageView
+    }
+}
+
+extension CalculatorViewController {
+    private func setupLabel(text: String, style: String, size: CGFloat,
+                            alignment: NSTextAlignment? = nil, color: UIColor) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont(name: style, size: size)
+        label.textAlignment = alignment ?? .natural
+        label.textColor = color
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }
 }
