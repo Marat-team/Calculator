@@ -337,9 +337,9 @@ class CalculatorViewController: UIViewController {
     
     private let sizeButton: CGFloat = 78.75
     private var start = true
-    private var calculate = false
     private var tagButton = 0
-    private var number: Float = 0
+    private var numberOne: Float = 0
+    private var numberTwo: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -540,70 +540,91 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonAcInput() {
-        resetLabelResults()
-        guard tagButton > 0 else { return }
-        setupButtonCalcPress(tag: tagButton)
+        switch tagButton {
+        case 1...4:
+            buttonCalcPress()
+        default:
+            resetLabelResults()
+        }
     }
     
     private func resetLabelResults() {
+        print("tagButton: \(tagButton), numberOne: \(numberOne), numberTwo: \(numberTwo)")
         labelResults.text = "0"
         labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
+        checkStart()
+        guard labelAc.text == "C" else { return }
         labelAc.text = "AC"
+    }
+    
+    private func setupButtonCalcPress() {
+        guard !start else { return }
+        setupButtonCalcPress(tag: tagButton)
+    }
+    
+    private func resetAllConfiguration() {
+        tagButton = 0
+        numberOne = 0
+        numberTwo = 0
+    }
+    
+    private func buttonCalcPress() {
+        if labelAc.text == "C" {
+            setupButtonCalcPress()
+            resetLabelResults()
+        } else {
+            checkResetButtons()
+            resetAllConfiguration()
+        }
     }
     
     @objc private func buttonNumbersInput(button: UIButton) {
         guard labelResults.text?.count ?? 0 < 9 else { return }
         let tag = button.tag
         let count = labelResults.text?.count ?? 0
-        let text = labelResults.text ?? ""
         
-        numbersInput(tag: tag, text: text)
+        numbersInput(tag: tag)
         checkResetButtons()
-        numbersInputSizeText(count: count)
     }
     
-    private func numbersInputSizeText(count: Int) {
-        switch count {
-        case 7:
-            labelResults.font = UIFont(name: "Kohinoor Bangla", size: 90)
-        case 8:
-            labelResults.font = UIFont(name: "Kohinoor Bangla", size: 80)
-        case 9:
-            labelResults.font = UIFont(name: "Kohinoor Bangla", size: 70)
-        default: break
-        }
-    }
-    
-    private func numbersInput(tag: Int, text: String) {
+    private func numbersInput(tag: Int) {
         if start {
             input(tag: tag)
         } else {
-            inputCountinue(tag: tag, text: text)
+            inputCountinue(tag: tag)
         }
     }
     
     private func input(tag: Int) {
         start.toggle()
-        print("start: \(start)")
-        labelResults.text = "\(tag)"
-        if labelAc.text == "AC" {
-            labelAc.text = "C"
+        let text = "\(tag)"
+        labelResults.text = text
+        
+        setupNumber(text: text)
+        
+        guard labelAc.text == "AC" else { return }
+        labelAc.text = "C"
+    }
+    
+    private func inputCountinue(tag: Int) {
+        var text = labelResults.text ?? ""
+        text += "\(tag)"
+        labelResults.text = "\(text)"
+        
+        setupNumber(text: text)
+    }
+    
+    private func setupNumber(text: String) {
+        let number = Float(text) ?? 0
+        checkSetupNumber(number: number)
+    }
+    
+    private func checkSetupNumber(number: Float) {
+        if tagButton > 0 {
+            numberTwo = number
+        } else {
+            numberOne = number
         }
-    }
-    
-    private func inputCountinue(tag: Int, text: String) {
-        var value = text
-        value += "\(tag)"
-        labelResults.text = value
-    }
-    
-    private func checkResetButtons() {
-        guard calculate else { return }
-        calculate.toggle()
-        buttonCalcDefault(buttons: buttonDivision,
-                          buttonMultiplier,
-                          buttonMinus,
-                          buttonPlus)
     }
     
     @objc private func calc(button: UIButton) {
@@ -616,64 +637,72 @@ class CalculatorViewController: UIViewController {
     }
     
     private func calcButtons(tag: Int) {
-        let text = labelResults.text ?? ""
-        number = Float(text) ?? 0
+        checkButtonAc()
         
         checkResetButtons()
         checkStart()
-        checkCalc()
-        tagButton = tag
         
+        tagButton = tag
         setupButtonCalcPress(tag: tag)
     }
     
+    private func checkButtonAc() {
+        guard labelAc.text == "AC" else { return }
+        labelResults.text = "\(numberOne)"
+    }
+    
+    private func checkResetButtons() {
+        guard tagButton > 0 else { return }
+        buttonCalcDefault(buttons: buttonDivision,
+                          buttonMultiplier,
+                          buttonMinus,
+                          buttonPlus)
+    }
+    
     private func calcResult(tag: Int) {
-        let text = labelResults.text ?? ""
-        let value = Float(text) ?? 0
-        
-        switch tag {
-        case 1: division(value: value)
-        case 2: multiplication(value: value)
-        case 3: subtraction(value: value)
-        default: summation(value: value)
-        }
-        
+        guard tagButton > 0 else { return }
+        checkNumberTwo()
+        runCalculation(tag: tag)
         checkStart()
     }
     
-    private func division(value: Float) {
-        let result = number / value
-        labelResults.text = "\(result)"
-        number = result
+    private func checkNumberTwo() {
+        guard start else { return }
+        guard numberTwo == 0 else { return }
+        numberTwo = setupNumber()
     }
     
-    private func multiplication(value: Float) {
-        let result = number * value
-        labelResults.text = "\(result)"
-        number = result
+    private func setupNumber() -> Float {
+        let text = labelResults.text ?? ""
+        return Float(text) ?? 0
     }
     
-    private func subtraction(value: Float) {
-        let result = number - value
-        labelResults.text = "\(result)"
-        number = result
+    private func runCalculation(tag: Int) {
+        switch tag {
+        case 1: labelResults.text = "\(calculate(.division))"
+        case 2: labelResults.text = "\(calculate(.multiplication))"
+        case 3: labelResults.text = "\(calculate(.subtraction))"
+        default: labelResults.text = "\(calculate(.addition))"
+        }
     }
     
-    private func summation(value: Float) {
-        let result = number + value
-        labelResults.text = "\(result)"
-        number = result
+    private func calculate(_ calculate: Calculate) -> Float {
+        var result = numberOne
+        
+        switch calculate {
+        case .division: result /= numberTwo
+        case .multiplication: result *= numberTwo
+        case .subtraction: result -= numberTwo
+        case .addition: result += numberTwo
+        }
+        numberOne = result
+        
+        return result
     }
     
     private func checkStart() {
         guard !start else { return }
         start.toggle()
-        print("start: \(start)")
-    }
-    
-    private func checkCalc() {
-        guard !calculate else { return }
-        calculate.toggle()
     }
     
     private func setupButtonCalcPress(tag: Int) {
@@ -681,7 +710,8 @@ class CalculatorViewController: UIViewController {
         case 1: buttonCalcPress(button: buttonDivision)
         case 2: buttonCalcPress(button: buttonMultiplier)
         case 3: buttonCalcPress(button: buttonMinus)
-        default: buttonCalcPress(button: buttonPlus)
+        case 4: buttonCalcPress(button: buttonPlus)
+        default: break
         }
     }
     
@@ -751,6 +781,7 @@ extension CalculatorViewController {
         label.font = UIFont(name: style, size: size)
         label.textAlignment = alignment ?? .natural
         label.textColor = color
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
