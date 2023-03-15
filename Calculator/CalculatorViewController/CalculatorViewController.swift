@@ -30,19 +30,24 @@ class CalculatorViewController: UIViewController {
         return label
     }()
     
-    private lazy var buttonPlusOfMinus: UIButton = {
+    private lazy var buttonPlusMinus: UIButton = {
         let button = setupButton(
             backgroundColor:
                 UIColor(
                     red: 119/255,
                     green: 221/255,
                     blue: 231/255,
-                    alpha: 1),
+                    alpha: 1))
+        button.addTarget(self, action: #selector(plusMinus), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var labelPlusMinus: UILabel = {
+        let label = setupLabel(
             image: image(
                 image: "plus.forwardslash.minus",
-                size: 28).image,
-            colorTitle: .black)
-        return button
+                size: 38).image)
+        return label
     }()
     
     private lazy var buttonPercent: UIButton = {
@@ -337,7 +342,8 @@ class CalculatorViewController: UIViewController {
     
     private let sizeButton: CGFloat = 78.75
     private var start = true
-    private var tagButton = 0
+    private var isNumberOne = true
+    private var arithmelticButton = 0
     private var numberOne: Float = 0
     private var numberTwo: Float = 0
     
@@ -345,7 +351,7 @@ class CalculatorViewController: UIViewController {
         super.viewDidLoad()
         setupDesign()
         addSubviews(subviews: buttonAc,
-                    buttonPlusOfMinus,
+                    buttonPlusMinus,
                     buttonPercent,
                     buttonDivision,
                     buttonSeven,
@@ -375,6 +381,7 @@ class CalculatorViewController: UIViewController {
             alpha: 1)
         
         addSubviewOnbutton(label: labelAc, button: buttonAc)
+        addSubviewOnbutton(label: labelPlusMinus, button: buttonPlusMinus)
         addSubviewOnbutton(label: labelZero, button: buttonZero)
     }
     
@@ -402,14 +409,19 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            buttonPlusOfMinus.leadingAnchor.constraint(equalTo: buttonAc.trailingAnchor, constant: 15),
-            buttonPlusOfMinus.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
-            buttonPlusOfMinus.heightAnchor.constraint(equalToConstant: sizeButton),
-            buttonPlusOfMinus.widthAnchor.constraint(equalToConstant: sizeButton)
+            buttonPlusMinus.leadingAnchor.constraint(equalTo: buttonAc.trailingAnchor, constant: 15),
+            buttonPlusMinus.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
+            buttonPlusMinus.heightAnchor.constraint(equalToConstant: sizeButton),
+            buttonPlusMinus.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
         
         NSLayoutConstraint.activate([
-            buttonPercent.leadingAnchor.constraint(equalTo: buttonPlusOfMinus.trailingAnchor, constant: 15),
+            labelPlusMinus.centerXAnchor.constraint(equalTo: buttonPlusMinus.centerXAnchor),
+            labelPlusMinus.centerYAnchor.constraint(equalTo: buttonPlusMinus.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            buttonPercent.leadingAnchor.constraint(equalTo: buttonPlusMinus.trailingAnchor, constant: 15),
             buttonPercent.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
             buttonPercent.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonPercent.widthAnchor.constraint(equalToConstant: sizeButton)
@@ -431,7 +443,7 @@ class CalculatorViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             buttonEight.leadingAnchor.constraint(equalTo: buttonSeven.trailingAnchor, constant: 15),
-            buttonEight.topAnchor.constraint(equalTo: buttonPlusOfMinus.bottomAnchor, constant: 15),
+            buttonEight.topAnchor.constraint(equalTo: buttonPlusMinus.bottomAnchor, constant: 15),
             buttonEight.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonEight.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
@@ -540,32 +552,12 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonAcInput() {
-        switch tagButton {
+        switch arithmelticButton {
         case 1...4:
             buttonCalcPress()
         default:
             resetLabelResults()
         }
-    }
-    
-    private func resetLabelResults() {
-        print("tagButton: \(tagButton), numberOne: \(numberOne), numberTwo: \(numberTwo)")
-        labelResults.text = "0"
-        labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
-        checkStart()
-        guard labelAc.text == "C" else { return }
-        labelAc.text = "AC"
-    }
-    
-    private func setupButtonCalcPress() {
-        guard !start else { return }
-        setupButtonCalcPress(tag: tagButton)
-    }
-    
-    private func resetAllConfiguration() {
-        tagButton = 0
-        numberOne = 0
-        numberTwo = 0
     }
     
     private func buttonCalcPress() {
@@ -578,10 +570,29 @@ class CalculatorViewController: UIViewController {
         }
     }
     
+    private func resetLabelResults() {
+        labelResults.text = "0"
+        labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
+        checkStart()
+        resetNumberOne()
+        guard labelAc.text == "C" else { return }
+        labelAc.text = "AC"
+    }
+    
+    private func setupButtonCalcPress() {
+        guard !start else { return }
+        setupButtonCalcPress(tag: arithmelticButton)
+    }
+    
+    private func resetAllConfiguration() {
+        arithmelticButton = 0
+        numberOne = 0
+        numberTwo = 0
+    }
+    
     @objc private func buttonNumbersInput(button: UIButton) {
         guard labelResults.text?.count ?? 0 < 9 else { return }
         let tag = button.tag
-        let count = labelResults.text?.count ?? 0
         
         numbersInput(tag: tag)
         checkResetButtons()
@@ -620,11 +631,18 @@ class CalculatorViewController: UIViewController {
     }
     
     private func checkSetupNumber(number: Float) {
-        if tagButton > 0 {
-            numberTwo = number
-        } else {
+        if isNumberOne {
             numberOne = number
+        } else {
+            numberTwo = number
         }
+    }
+    
+    @objc private func plusMinus() {
+        var text = setupNumber()
+        text.negate()
+        checkSetupNumber(number: text)
+        labelResults.text = "\(text.clean())"
     }
     
     @objc private func calc(button: UIButton) {
@@ -632,27 +650,35 @@ class CalculatorViewController: UIViewController {
         if tag < 5 {
             calcButtons(tag: tag)
         } else {
-            calcResult(tag: tagButton)
+            calcResult(tag: arithmelticButton)
         }
     }
     
     private func calcButtons(tag: Int) {
         checkButtonAc()
-        
+        checkNumberOne()
         checkResetButtons()
         checkStart()
         
-        tagButton = tag
+        arithmelticButton = tag
         setupButtonCalcPress(tag: tag)
     }
     
     private func checkButtonAc() {
         guard labelAc.text == "AC" else { return }
-        labelResults.text = "\(numberOne)"
+        labelResults.text = "\(numberOne.clean())"
+    }
+    
+    private func checkNumberOne() {
+        if isNumberOne {
+            isNumberOne.toggle()
+        } else {
+            runCalculation(tag: arithmelticButton)
+        }
     }
     
     private func checkResetButtons() {
-        guard tagButton > 0 else { return }
+        guard arithmelticButton > 0 else { return }
         buttonCalcDefault(buttons: buttonDivision,
                           buttonMultiplier,
                           buttonMinus,
@@ -660,10 +686,18 @@ class CalculatorViewController: UIViewController {
     }
     
     private func calcResult(tag: Int) {
-        guard tagButton > 0 else { return }
+        guard arithmelticButton > 0 else { return }
+        
         checkNumberTwo()
         runCalculation(tag: tag)
+        
         checkStart()
+        resetNumberOne()
+    }
+    
+    private func resetNumberOne() {
+        guard !isNumberOne else { return }
+        isNumberOne.toggle()
     }
     
     private func checkNumberTwo() {
@@ -679,10 +713,10 @@ class CalculatorViewController: UIViewController {
     
     private func runCalculation(tag: Int) {
         switch tag {
-        case 1: labelResults.text = "\(calculate(.division))"
-        case 2: labelResults.text = "\(calculate(.multiplication))"
-        case 3: labelResults.text = "\(calculate(.subtraction))"
-        default: labelResults.text = "\(calculate(.addition))"
+        case 1: labelResults.text = "\(calculate(.division).clean())"
+        case 2: labelResults.text = "\(calculate(.multiplication).clean())"
+        case 3: labelResults.text = "\(calculate(.subtraction).clean())"
+        default: labelResults.text = "\(calculate(.addition).clean())"
         }
     }
     
@@ -774,15 +808,44 @@ extension CalculatorViewController {
 }
 
 extension CalculatorViewController {
-    private func setupLabel(text: String, style: String, size: CGFloat,
-                            alignment: NSTextAlignment? = nil, color: UIColor) -> UILabel {
+    private func setupLabel(text: String? = nil, style: String? = nil,
+                            size: CGFloat? = nil, alignment: NSTextAlignment? = nil,
+                            color: UIColor? = nil, image: UIImage? = nil) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.font = UIFont(name: style, size: size)
+        label.font = UIFont(name: style ?? "", size: size ?? 0)
         label.textAlignment = alignment ?? .natural
         label.textColor = color
+        
+        if let image = image {
+            label.addImage(image: image)
+        }
+        
         label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }
+}
+
+extension Float {
+    func clean() -> String {
+        let formatter = NumberFormatter()
+        let number = NSNumber(value: self)
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 8
+        return String(formatter.string(from: number) ?? "")
+    }
+}
+
+extension UILabel {
+    func addImage(image: UIImage) {
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        
+        let attachmentString = NSAttributedString(attachment: attachment)
+        let string = NSMutableAttributedString(string: self.text ?? "", attributes: [:])
+        
+        string.append(attachmentString)
+        self.attributedText = string
     }
 }
