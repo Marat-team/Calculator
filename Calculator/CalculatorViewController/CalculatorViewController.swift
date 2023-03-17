@@ -8,20 +8,20 @@
 import UIKit
 
 class CalculatorViewController: UIViewController {
-    
-    private lazy var buttonAc: UIButton = {
-        let button = setupButton(
-            backgroundColor:
-                UIColor(
-                    red: 119/255,
-                    green: 221/255,
-                    blue: 231/255,
-                    alpha: 1))
+    private lazy var buttonClean: UIButton = {
+        let button = Button().setupButton(
+            backgroundColor: UIColor(
+                red: 119/255,
+                green: 221/255,
+                blue: 231/255,
+                alpha: 1),
+            cornerRadius: corner(size: sizeButton),
+            subview: labelClean)
         button.addTarget(self, action: #selector(buttonAcInput), for: .touchUpInside)
         return button
     }()
     
-    private lazy var labelAc: UILabel = {
+    private lazy var labelClean: UILabel = {
         let label = setupLabel(
             text: "AC",
             style: "Arial",
@@ -31,261 +31,367 @@ class CalculatorViewController: UIViewController {
     }()
     
     private lazy var buttonPlusMinus: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 119/255,
                     green: 221/255,
                     blue: 231/255,
-                    alpha: 1))
+                    alpha: 1),
+            cornerRadius: corner(size: sizeButton),
+            subview: imagePlusMinus)
         button.addTarget(self, action: #selector(plusMinus), for: .touchUpInside)
         return button
     }()
     
-    private lazy var labelPlusMinus: UILabel = {
-        let label = setupLabel(
-            image: image(
-                image: "plus.forwardslash.minus",
-                size: 38).image)
-        return label
+    private lazy var imagePlusMinus: UIImageView = {
+        let imageView = setupImage(
+            image: "plus.forwardslash.minus",
+            size: 38,
+            color: .black)
+        return imageView
     }()
     
     private lazy var buttonPercent: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 119/255,
                     green: 221/255,
                     blue: 231/255,
                     alpha: 1),
-            image: image(
-                image: "percent",
-                size: 28).image,
-            colorTitle: .black)
+            cornerRadius: corner(size: sizeButton),
+            subview: imagePercent)
         return button
+    }()
+    
+    private lazy var imagePercent: UIImageView = {
+        let imageView = setupImage(
+            image: "percent",
+            size: 38,
+            color: .black)
+        return imageView
     }()
     
     private lazy var buttonDivision: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 83/255,
                     blue: 73/255,
                     alpha: 1),
-            image: image(
-                image: "divide",
-                size: 28).image,
-            colorTitle: .white,
-            tag: 1)
+            cornerRadius: corner(size: sizeButton),
+            tag: 1,
+            subview: imageDivision)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var imageDivision: UIImageView = {
+        let imageView = setupImage(
+            image: "divide",
+            size: 38,
+            color: .white)
+        return imageView
     }()
     
     private lazy var buttonSeven: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "7",
-            colorTitle: .black,
-            size: 42,
-            tag: 7)
+            cornerRadius: corner(size: sizeButton),
+            tag: 7,
+            subview: labelSeven)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelSeven: UILabel = {
+        let label = setupLabel(
+            text: "7",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonEight: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "8",
-            colorTitle: .black,
-            size: 42,
-            tag: 8)
+            cornerRadius: corner(size: sizeButton),
+            tag: 8,
+            subview: labelEight)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelEight: UILabel = {
+        let label = setupLabel(
+            text: "8",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonNine: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "9",
-            colorTitle: .black,
-            size: 42,
-            tag: 9)
+            cornerRadius: corner(size: sizeButton),
+            tag: 9,
+            subview: labelNine)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelNine: UILabel = {
+        let label = setupLabel(
+            text: "9",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonMultiplier: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 83/255,
                     blue: 73/255,
                     alpha: 1),
-            image: image(
-                image: "multiply",
-                size: 28).image,
-            colorTitle: .white,
-            tag: 2)
+            cornerRadius: corner(size: sizeButton),
+            tag: 2,
+            subview: imageMultiplier)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var imageMultiplier: UIImageView = {
+        let imageView = setupImage(
+            image: "multiply",
+            size: 38,
+            color: .white)
+        return imageView
     }()
     
     private lazy var buttonFour: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "4",
-            colorTitle: .black,
-            size: 42,
-            tag: 4)
+            cornerRadius: corner(size: sizeButton),
+            tag: 4,
+            subview: labelFour)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelFour: UILabel = {
+        let label = setupLabel(
+            text: "4",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonFive: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "5",
-            colorTitle: .black,
-            size: 42,
-            tag: 5)
+            cornerRadius: corner(size: sizeButton),
+            tag: 5,
+            subview: labelFive)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelFive: UILabel = {
+        let label = setupLabel(
+            text: "5",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonSix: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "6",
-            colorTitle: .black,
-            size: 42,
-            tag: 6)
+            cornerRadius: corner(size: sizeButton),
+            tag: 6,
+            subview: labelSix)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
     }()
     
-    private lazy var buttonMinus: UIButton = {
-        let button = setupButton(
+    private lazy var labelSix: UILabel = {
+        let label = setupLabel(
+            text: "6",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
+    }()
+    
+    private lazy var buttonSubtract: UIButton = {
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 83/255,
                     blue: 73/255,
                     alpha: 1),
-            image: image(
-                image: "minus",
-                size: 28).image,
-            colorTitle: .white,
-            tag: 3)
+            cornerRadius: corner(size: sizeButton),
+            tag: 3,
+            subview: imageSubtract)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var imageSubtract: UIImageView = {
+        let imageView = setupImage(
+            image: "minus",
+            size: 38,
+            color: .white)
+        return imageView
     }()
     
     private lazy var buttonOne: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "1",
-            colorTitle: .black,
-            size: 42,
-            tag: 1)
+            cornerRadius: corner(size: sizeButton),
+            tag: 1,
+            subview: labelOne)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelOne: UILabel = {
+        let label = setupLabel(
+            text: "1",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonTwo: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "2",
-            colorTitle: .black,
-            size: 42,
-            tag: 2)
+            cornerRadius: corner(size: sizeButton),
+            tag: 2,
+            subview: labelTwo)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var labelTwo: UILabel = {
+        let label = setupLabel(
+            text: "2",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
     }()
     
     private lazy var buttonThree: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: "3",
-            colorTitle: .black,
-            size: 42,
-            tag: 3)
+            cornerRadius: corner(size: sizeButton),
+            tag: 3,
+            subview: labelThree)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
     }()
     
-    private lazy var buttonPlus: UIButton = {
-        let button = setupButton(
+    private lazy var labelThree: UILabel = {
+        let label = setupLabel(
+            text: "3",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
+    }()
+    
+    private lazy var buttonAdd: UIButton = {
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 83/255,
                     blue: 73/255,
                     alpha: 1),
-            image: image(
-                image: "plus",
-                size: 28).image,
-            colorTitle: .white,
-            tag: 4)
+            cornerRadius: corner(size: sizeButton),
+            tag: 4,
+            subview: imageAdd)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
     }()
     
+    private lazy var imageAdd: UIImageView = {
+        let imageView = setupImage(
+            image: "plus",
+            size: 38,
+            color: .white)
+        return imageView
+    }()
+    
     private lazy var buttonZero: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            tag: 0)
+            cornerRadius: corner(size: sizeButton),
+            tag: 0,
+            subview: labelZero)
         button.addTarget(self, action: #selector(buttonNumbersInput), for: .touchUpInside)
         return button
     }()
@@ -300,34 +406,48 @@ class CalculatorViewController: UIViewController {
     }()
     
     private lazy var buttonComma: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 219/255,
                     blue: 139/255,
                     alpha: 1),
-            title: ",",
-            colorTitle: .black,
-            size: 42)
+            cornerRadius: corner(size: sizeButton),
+            subview: labelComma)
         return button
     }()
     
+    private lazy var labelComma: UILabel = {
+        let label = setupLabel(
+            text: ",",
+            style: "Arial",
+            size: 42,
+            color: .black)
+        return label
+    }()
+    
     private lazy var buttonEqual: UIButton = {
-        let button = setupButton(
+        let button = Button().setupButton(
             backgroundColor:
                 UIColor(
                     red: 255/255,
                     green: 83/255,
                     blue: 73/255,
                     alpha: 1),
-            image: image(
-                image: "equal",
-                size: 28).image,
-            colorTitle: .white,
-            tag: 5)
+            cornerRadius: corner(size: sizeButton),
+            tag: 5,
+            subview: imageEqual)
         button.addTarget(self, action: #selector(calc), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var imageEqual: UIImageView = {
+        let imageView = setupImage(
+            image: "equal",
+            size: 38,
+            color: .white)
+        return imageView
     }()
     
     private lazy var labelResults: UILabel = {
@@ -350,7 +470,7 @@ class CalculatorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDesign()
-        addSubviews(subviews: buttonAc,
+        addSubviews(subviews: buttonClean,
                     buttonPlusMinus,
                     buttonPercent,
                     buttonDivision,
@@ -361,11 +481,11 @@ class CalculatorViewController: UIViewController {
                     buttonFour,
                     buttonFive,
                     buttonSix,
-                    buttonMinus,
+                    buttonSubtract,
                     buttonOne,
                     buttonTwo,
                     buttonThree,
-                    buttonPlus,
+                    buttonAdd,
                     buttonZero,
                     buttonComma,
                     buttonEqual,
@@ -379,10 +499,6 @@ class CalculatorViewController: UIViewController {
             green: 36/255,
             blue: 92/255,
             alpha: 1)
-        
-        addSubviewOnbutton(label: labelAc, button: buttonAc)
-        addSubviewOnbutton(label: labelPlusMinus, button: buttonPlusMinus)
-        addSubviewOnbutton(label: labelZero, button: buttonZero)
     }
     
     private func addSubviews(subviews: UIView...) {
@@ -391,33 +507,29 @@ class CalculatorViewController: UIViewController {
         }
     }
     
-    private func addSubviewOnbutton(label: UILabel, button: UIButton) {
-        button.addSubview(label)
-    }
-    
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            buttonAc.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            buttonAc.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
-            buttonAc.heightAnchor.constraint(equalToConstant: sizeButton),
-            buttonAc.widthAnchor.constraint(equalToConstant: sizeButton)
+            buttonClean.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            buttonClean.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
+            buttonClean.heightAnchor.constraint(equalToConstant: sizeButton),
+            buttonClean.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
         
         NSLayoutConstraint.activate([
-            labelAc.centerXAnchor.constraint(equalTo: buttonAc.centerXAnchor),
-            labelAc.centerYAnchor.constraint(equalTo: buttonAc.centerYAnchor)
+            labelClean.centerXAnchor.constraint(equalTo: buttonClean.centerXAnchor),
+            labelClean.centerYAnchor.constraint(equalTo: buttonClean.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            buttonPlusMinus.leadingAnchor.constraint(equalTo: buttonAc.trailingAnchor, constant: 15),
+            buttonPlusMinus.leadingAnchor.constraint(equalTo: buttonClean.trailingAnchor, constant: 15),
             buttonPlusMinus.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
             buttonPlusMinus.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonPlusMinus.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
         
         NSLayoutConstraint.activate([
-            labelPlusMinus.centerXAnchor.constraint(equalTo: buttonPlusMinus.centerXAnchor),
-            labelPlusMinus.centerYAnchor.constraint(equalTo: buttonPlusMinus.centerYAnchor)
+            imagePlusMinus.centerXAnchor.constraint(equalTo: buttonPlusMinus.centerXAnchor),
+            imagePlusMinus.centerYAnchor.constraint(equalTo: buttonPlusMinus.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -428,6 +540,11 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            imagePercent.centerXAnchor.constraint(equalTo: buttonPercent.centerXAnchor),
+            imagePercent.centerYAnchor.constraint(equalTo: buttonPercent.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonDivision.leadingAnchor.constraint(equalTo: buttonPercent.trailingAnchor, constant: 15),
             buttonDivision.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
             buttonDivision.heightAnchor.constraint(equalToConstant: sizeButton),
@@ -435,10 +552,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            imageDivision.centerXAnchor.constraint(equalTo: buttonDivision.centerXAnchor),
+            imageDivision.centerYAnchor.constraint(equalTo: buttonDivision.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonSeven.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            buttonSeven.topAnchor.constraint(equalTo: buttonAc.bottomAnchor, constant: 15),
+            buttonSeven.topAnchor.constraint(equalTo: buttonClean.bottomAnchor, constant: 15),
             buttonSeven.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonSeven.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            labelSeven.centerXAnchor.constraint(equalTo: buttonSeven.centerXAnchor),
+            labelSeven.centerYAnchor.constraint(equalTo: buttonSeven.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -449,10 +576,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            labelEight.centerXAnchor.constraint(equalTo: buttonEight.centerXAnchor),
+            labelEight.centerYAnchor.constraint(equalTo: buttonEight.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonNine.leadingAnchor.constraint(equalTo: buttonEight.trailingAnchor, constant: 15),
             buttonNine.topAnchor.constraint(equalTo: buttonPercent.bottomAnchor, constant: 15),
             buttonNine.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonNine.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            labelNine.centerXAnchor.constraint(equalTo: buttonNine.centerXAnchor),
+            labelNine.centerYAnchor.constraint(equalTo: buttonNine.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -463,10 +600,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            imageMultiplier.centerXAnchor.constraint(equalTo: buttonMultiplier.centerXAnchor),
+            imageMultiplier.centerYAnchor.constraint(equalTo: buttonMultiplier.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonFour.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             buttonFour.topAnchor.constraint(equalTo: buttonSeven.bottomAnchor, constant: 15),
             buttonFour.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonFour.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            labelFour.centerXAnchor.constraint(equalTo: buttonFour.centerXAnchor),
+            labelFour.centerYAnchor.constraint(equalTo: buttonFour.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -477,6 +624,11 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            labelFive.centerXAnchor.constraint(equalTo: buttonFive.centerXAnchor),
+            labelFive.centerYAnchor.constraint(equalTo: buttonFive.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonSix.leadingAnchor.constraint(equalTo: buttonFive.trailingAnchor, constant: 15),
             buttonSix.topAnchor.constraint(equalTo: buttonNine.bottomAnchor, constant: 15),
             buttonSix.heightAnchor.constraint(equalToConstant: sizeButton),
@@ -484,10 +636,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            buttonMinus.leadingAnchor.constraint(equalTo: buttonSix.trailingAnchor, constant: 15),
-            buttonMinus.topAnchor.constraint(equalTo: buttonMultiplier.bottomAnchor, constant: 15),
-            buttonMinus.heightAnchor.constraint(equalToConstant: sizeButton),
-            buttonMinus.widthAnchor.constraint(equalToConstant: sizeButton)
+            labelSix.centerXAnchor.constraint(equalTo: buttonSix.centerXAnchor),
+            labelSix.centerYAnchor.constraint(equalTo: buttonSix.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            buttonSubtract.leadingAnchor.constraint(equalTo: buttonSix.trailingAnchor, constant: 15),
+            buttonSubtract.topAnchor.constraint(equalTo: buttonMultiplier.bottomAnchor, constant: 15),
+            buttonSubtract.heightAnchor.constraint(equalToConstant: sizeButton),
+            buttonSubtract.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            imageSubtract.centerXAnchor.constraint(equalTo: buttonSubtract.centerXAnchor),
+            imageSubtract.centerYAnchor.constraint(equalTo: buttonSubtract.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -498,10 +660,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            labelOne.centerXAnchor.constraint(equalTo: buttonOne.centerXAnchor),
+            labelOne.centerYAnchor.constraint(equalTo: buttonOne.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonTwo.leadingAnchor.constraint(equalTo: buttonOne.trailingAnchor, constant: 15),
             buttonTwo.topAnchor.constraint(equalTo: buttonFive.bottomAnchor, constant: 15),
             buttonTwo.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonTwo.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            labelTwo.centerXAnchor.constraint(equalTo: buttonTwo.centerXAnchor),
+            labelTwo.centerYAnchor.constraint(equalTo: buttonTwo.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -512,10 +684,20 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            buttonPlus.leadingAnchor.constraint(equalTo: buttonThree.trailingAnchor, constant: 15),
-            buttonPlus.topAnchor.constraint(equalTo: buttonMinus.bottomAnchor, constant: 15),
-            buttonPlus.heightAnchor.constraint(equalToConstant: sizeButton),
-            buttonPlus.widthAnchor.constraint(equalToConstant: sizeButton)
+            labelThree.centerXAnchor.constraint(equalTo: buttonThree.centerXAnchor),
+            labelThree.centerYAnchor.constraint(equalTo: buttonThree.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            buttonAdd.leadingAnchor.constraint(equalTo: buttonThree.trailingAnchor, constant: 15),
+            buttonAdd.topAnchor.constraint(equalTo: buttonSubtract.bottomAnchor, constant: 15),
+            buttonAdd.heightAnchor.constraint(equalToConstant: sizeButton),
+            buttonAdd.widthAnchor.constraint(equalToConstant: sizeButton)
+        ])
+        
+        NSLayoutConstraint.activate([
+            imageAdd.centerXAnchor.constraint(equalTo: buttonAdd.centerXAnchor),
+            imageAdd.centerYAnchor.constraint(equalTo: buttonAdd.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -538,16 +720,26 @@ class CalculatorViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            labelComma.centerXAnchor.constraint(equalTo: buttonComma.centerXAnchor),
+            labelComma.centerYAnchor.constraint(equalTo: buttonComma.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             buttonEqual.leadingAnchor.constraint(equalTo: buttonComma.trailingAnchor, constant: 15),
-            buttonEqual.topAnchor.constraint(equalTo: buttonPlus.bottomAnchor, constant: 15),
+            buttonEqual.topAnchor.constraint(equalTo: buttonAdd.bottomAnchor, constant: 15),
             buttonEqual.heightAnchor.constraint(equalToConstant: sizeButton),
             buttonEqual.widthAnchor.constraint(equalToConstant: sizeButton)
         ])
         
         NSLayoutConstraint.activate([
+            imageEqual.centerXAnchor.constraint(equalTo: buttonEqual.centerXAnchor),
+            imageEqual.centerYAnchor.constraint(equalTo: buttonEqual.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             labelResults.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
             labelResults.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-            labelResults.bottomAnchor.constraint(equalTo: buttonAc.topAnchor, constant: -25)
+            labelResults.bottomAnchor.constraint(equalTo: buttonClean.topAnchor, constant: -25)
         ])
     }
     
@@ -561,7 +753,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func buttonCalcPress() {
-        if labelAc.text == "C" {
+        if labelClean.text == "C" {
             setupButtonCalcPress()
             resetLabelResults()
         } else {
@@ -575,8 +767,8 @@ class CalculatorViewController: UIViewController {
         labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
         checkStart()
         resetNumberOne()
-        guard labelAc.text == "C" else { return }
-        labelAc.text = "AC"
+        guard labelClean.text == "C" else { return }
+        labelClean.text = "AC"
     }
     
     private func setupButtonCalcPress() {
@@ -591,11 +783,12 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonNumbersInput(button: UIButton) {
-        guard labelResults.text?.count ?? 0 < 9 else { return }
         let tag = button.tag
-        
         numbersInput(tag: tag)
         checkResetButtons()
+        
+        guard labelResults.text?.count ?? 0 > 9 else { return }
+        labelResults.text?.removeLast()
     }
     
     private func numbersInput(tag: Int) {
@@ -613,8 +806,8 @@ class CalculatorViewController: UIViewController {
         
         setupNumber(text: text)
         
-        guard labelAc.text == "AC" else { return }
-        labelAc.text = "C"
+        guard labelClean.text == "AC" else { return }
+        labelClean.text = "C"
     }
     
     private func inputCountinue(tag: Int) {
@@ -665,7 +858,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func checkButtonAc() {
-        guard labelAc.text == "AC" else { return }
+        guard labelClean.text == "AC" else { return }
         labelResults.text = "\(numberOne.clean())"
     }
     
@@ -681,8 +874,12 @@ class CalculatorViewController: UIViewController {
         guard arithmelticButton > 0 else { return }
         buttonCalcDefault(buttons: buttonDivision,
                           buttonMultiplier,
-                          buttonMinus,
-                          buttonPlus)
+                          buttonSubtract,
+                          buttonAdd,
+                          images: imageDivision,
+                          imageMultiplier,
+                          imageSubtract,
+                          imageAdd)
     }
     
     private func calcResult(tag: Int) {
@@ -704,6 +901,7 @@ class CalculatorViewController: UIViewController {
         guard start else { return }
         guard numberTwo == 0 else { return }
         numberTwo = setupNumber()
+        checkResetButtons()
     }
     
     private func setupNumber() -> Float {
@@ -718,6 +916,10 @@ class CalculatorViewController: UIViewController {
         case 3: labelResults.text = "\(calculate(.subtraction).clean())"
         default: labelResults.text = "\(calculate(.addition).clean())"
         }
+        
+        guard labelResults.text?.count ?? 0 > 9 else { return }
+        let text = String(format: "%e", numberOne)
+        labelResults.text = text
     }
     
     private func calculate(_ calculate: Calculate) -> Float {
@@ -741,16 +943,16 @@ class CalculatorViewController: UIViewController {
     
     private func setupButtonCalcPress(tag: Int) {
         switch tag {
-        case 1: buttonCalcPress(button: buttonDivision)
-        case 2: buttonCalcPress(button: buttonMultiplier)
-        case 3: buttonCalcPress(button: buttonMinus)
-        case 4: buttonCalcPress(button: buttonPlus)
+        case 1: buttonCalcPress(button: buttonDivision, image: imageDivision)
+        case 2: buttonCalcPress(button: buttonMultiplier, image: imageMultiplier)
+        case 3: buttonCalcPress(button: buttonSubtract, image: imageSubtract)
+        case 4: buttonCalcPress(button: buttonAdd, image: imageAdd)
         default: break
         }
     }
     
-    private func buttonCalcPress(button: UIButton) {
-        button.tintColor = UIColor(
+    private func buttonCalcPress(button: UIButton, image: UIImageView) {
+        image.tintColor = UIColor(
             red: 255/255,
             green: 83/255,
             blue: 73/255,
@@ -758,37 +960,22 @@ class CalculatorViewController: UIViewController {
         button.backgroundColor = .white
     }
     
-    private func buttonCalcDefault(buttons: UIButton...) {
+    private func buttonCalcDefault(buttons: UIButton..., images: UIImageView...) {
         buttons.forEach { button in
-            button.tintColor = .white
             button.backgroundColor = UIColor(
                 red: 255/255,
                 green: 83/255,
                 blue: 73/255,
                 alpha: 1)
         }
+        
+        images.forEach { image in
+            image.tintColor = .white
+        }
     }
 }
 
 extension CalculatorViewController {
-    private func setupButton(backgroundColor: UIColor,
-                             title: String? = nil,
-                             image: UIImage? = nil,
-                             colorTitle: UIColor? = nil,
-                             size: CGFloat? = nil,
-                             tag: Int? = nil) -> UIButton {
-        let button = UIButton(type: .system)
-        button.backgroundColor = backgroundColor
-        button.setTitle(title, for: .normal)
-        button.tintColor = colorTitle ?? .clear
-        button.titleLabel?.font = UIFont(name: "Arial", size: size ?? 0)
-        button.layer.cornerRadius = corner(size: sizeButton)
-        button.setImage(image, for: .normal)
-        button.tag = tag ?? 20
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }
-    
     private func corner(size: CGFloat) -> CGFloat {
         size / 2
     }
@@ -796,34 +983,31 @@ extension CalculatorViewController {
     private func width(size: CGFloat) -> CGFloat {
         size * 2 + 15
     }
-    
-    private func image(image: String, size: CGFloat) -> UIImageView {
-        let imageView = UIImageView()
-        let bold = UIImage.SymbolConfiguration(weight: .medium)
-        let size = UIImage.SymbolConfiguration(pointSize: size)
-        let combined = bold.applying(size)
-        imageView.image = UIImage(systemName: image, withConfiguration: combined)
-        return imageView
+}
+
+extension CalculatorViewController {
+    private func setupLabel(text: String, style: String,
+                            size: CGFloat, alignment: NSTextAlignment? = nil,
+                            color: UIColor) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont(name: style, size: size)
+        label.textAlignment = alignment ?? .natural
+        label.textColor = color
+        label.adjustsFontSizeToFitWidth = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }
 }
 
 extension CalculatorViewController {
-    private func setupLabel(text: String? = nil, style: String? = nil,
-                            size: CGFloat? = nil, alignment: NSTextAlignment? = nil,
-                            color: UIColor? = nil, image: UIImage? = nil) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = UIFont(name: style ?? "", size: size ?? 0)
-        label.textAlignment = alignment ?? .natural
-        label.textColor = color
-        
-        if let image = image {
-            label.addImage(image: image)
-        }
-        
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private func setupImage(image: String, size: CGFloat, color: UIColor) -> UIImageView {
+        let size = UIImage.SymbolConfiguration(pointSize: size)
+        let image = UIImage(systemName: image, withConfiguration: size)
+        let imageView = UIImageView(image: image)
+        imageView.tintColor = color
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }
 }
 
@@ -834,18 +1018,5 @@ extension Float {
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 8
         return String(formatter.string(from: number) ?? "")
-    }
-}
-
-extension UILabel {
-    func addImage(image: UIImage) {
-        let attachment = NSTextAttachment()
-        attachment.image = image
-        
-        let attachmentString = NSAttributedString(attachment: attachment)
-        let string = NSMutableAttributedString(string: self.text ?? "", attributes: [:])
-        
-        string.append(attachmentString)
-        self.attributedText = string
     }
 }
