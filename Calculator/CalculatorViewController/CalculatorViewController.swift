@@ -62,6 +62,7 @@ class CalculatorViewController: UIViewController {
                     alpha: 1),
             cornerRadius: corner(size: sizeButton),
             subview: imagePercent)
+        button.addTarget(self, action: #selector(percentCalc), for: .touchUpInside)
         return button
     }()
     
@@ -463,7 +464,7 @@ class CalculatorViewController: UIViewController {
     private let sizeButton: CGFloat = 78.75
     private var start = true
     private var isNumberOne = true
-    private var arithmelticButton = 0
+    private var arithmeticButton = 0
     private var numberOne: Float = 0
     private var numberTwo: Float = 0
     
@@ -744,7 +745,7 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonAcInput() {
-        switch arithmelticButton {
+        switch arithmeticButton {
         case 1...4:
             buttonCalcPress()
         default:
@@ -773,11 +774,11 @@ class CalculatorViewController: UIViewController {
     
     private func setupButtonCalcPress() {
         guard !start else { return }
-        setupButtonCalcPress(tag: arithmelticButton)
+        setupButtonCalcPress(tag: arithmeticButton)
     }
     
     private func resetAllConfiguration() {
-        arithmelticButton = 0
+        arithmeticButton = 0
         numberOne = 0
         numberTwo = 0
     }
@@ -811,11 +812,21 @@ class CalculatorViewController: UIViewController {
     }
     
     private func inputCountinue(tag: Int) {
-        var text = labelResults.text ?? ""
-        text += "\(tag)"
-        labelResults.text = "\(text)"
+        let text = labelResults.text ?? ""
+        let newText = checkText(text: text, tag: tag)
+        labelResults.text = "\(newText)"
         
-        setupNumber(text: text)
+        setupNumber(text: newText)
+    }
+    
+    private func checkText(text: String, tag: Int) -> String {
+        var newText = text
+        if text == "0" {
+            newText = "\(tag)"
+        } else {
+            newText += "\(tag)"
+        }
+        return newText
     }
     
     private func setupNumber(text: String) {
@@ -835,7 +846,7 @@ class CalculatorViewController: UIViewController {
         var text = setupNumber()
         text.negate()
         checkSetupNumber(number: text)
-        labelResults.text = "\(text.clean())"
+        labelResults.text = text.clean()
     }
     
     @objc private func calc(button: UIButton) {
@@ -843,35 +854,41 @@ class CalculatorViewController: UIViewController {
         if tag < 5 {
             calcButtons(tag: tag)
         } else {
-            calcResult(tag: arithmelticButton)
+            calcResult(tag: arithmeticButton)
         }
     }
     
     private func calcButtons(tag: Int) {
+        checkArithmeticOperator()
+        
         checkButtonAc()
         checkNumberOne()
         checkResetButtons()
         checkStart()
         
-        arithmelticButton = tag
+        arithmeticButton = tag
         setupButtonCalcPress(tag: tag)
     }
     
     private func checkButtonAc() {
         guard labelClean.text == "AC" else { return }
-        labelResults.text = "\(numberOne.clean())"
+        labelResults.text = numberOne.clean()
     }
     
     private func checkNumberOne() {
-        if isNumberOne {
-            isNumberOne.toggle()
-        } else {
-            runCalculation(tag: arithmelticButton)
-        }
+        guard isNumberOne else { return }
+        isNumberOne.toggle()
+    }
+    
+    private func checkArithmeticOperator() {
+        guard !isNumberOne else { return }
+        guard arithmeticButton > 0 else { return }
+        guard !start else { return }
+        runCalculation(tag: arithmeticButton)
     }
     
     private func checkResetButtons() {
-        guard arithmelticButton > 0 else { return }
+        guard arithmeticButton > 0 else { return }
         buttonCalcDefault(buttons: buttonDivision,
                           buttonMultiplier,
                           buttonSubtract,
@@ -883,7 +900,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func calcResult(tag: Int) {
-        guard arithmelticButton > 0 else { return }
+        guard arithmeticButton > 0 else { return }
         
         checkNumberTwo()
         runCalculation(tag: tag)
@@ -898,8 +915,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func checkNumberTwo() {
-        guard start else { return }
-        guard numberTwo == 0 else { return }
+        guard !isNumberOne else { return }
         numberTwo = setupNumber()
         checkResetButtons()
     }
@@ -911,10 +927,10 @@ class CalculatorViewController: UIViewController {
     
     private func runCalculation(tag: Int) {
         switch tag {
-        case 1: labelResults.text = "\(calculate(.division).clean())"
-        case 2: labelResults.text = "\(calculate(.multiplication).clean())"
-        case 3: labelResults.text = "\(calculate(.subtraction).clean())"
-        default: labelResults.text = "\(calculate(.addition).clean())"
+        case 1: labelResults.text = calculate(.division).clean()
+        case 2: labelResults.text = calculate(.multiplication).clean()
+        case 3: labelResults.text = calculate(.subtraction).clean()
+        default: labelResults.text = calculate(.addition).clean()
         }
         
         guard labelResults.text?.count ?? 0 > 9 else { return }
@@ -949,6 +965,12 @@ class CalculatorViewController: UIViewController {
         case 4: buttonCalcPress(button: buttonAdd, image: imageAdd)
         default: break
         }
+    }
+    
+    @objc private func percentCalc() {
+        let value = setupNumber() / 100
+        checkSetupNumber(number: value)
+        labelResults.text = "\(value)"
     }
     
     private func buttonCalcPress(button: UIButton, image: UIImageView) {
