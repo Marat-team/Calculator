@@ -416,6 +416,7 @@ class CalculatorViewController: UIViewController {
                     alpha: 1),
             cornerRadius: corner(size: sizeButton),
             subview: labelComma)
+        button.addTarget(self, action: #selector(comma), for: .touchUpInside)
         return button
     }()
     
@@ -463,10 +464,11 @@ class CalculatorViewController: UIViewController {
     
     private let sizeButton: CGFloat = 78.75
     private var start = true
-    private var isNumberOne = true
+    private var isNumberFirst = true
+    private var isComma = false
     private var arithmeticButton = 0
-    private var numberOne: Float = 0
-    private var numberTwo: Float = 0
+    private var numberFirst: Float = 0
+    private var numberSecond: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -768,6 +770,8 @@ class CalculatorViewController: UIViewController {
         labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
         checkStart()
         resetNumberOne()
+        isComma = false
+        
         guard labelClean.text == "C" else { return }
         labelClean.text = "AC"
     }
@@ -779,8 +783,8 @@ class CalculatorViewController: UIViewController {
     
     private func resetAllConfiguration() {
         arithmeticButton = 0
-        numberOne = 0
-        numberTwo = 0
+        numberFirst = 0
+        numberSecond = 0
     }
     
     @objc private func buttonNumbersInput(button: UIButton) {
@@ -835,10 +839,10 @@ class CalculatorViewController: UIViewController {
     }
     
     private func checkSetupNumber(number: Float) {
-        if isNumberOne {
-            numberOne = number
+        if isNumberFirst {
+            numberFirst = number
         } else {
-            numberTwo = number
+            numberSecond = number
         }
     }
     
@@ -865,6 +869,7 @@ class CalculatorViewController: UIViewController {
         checkNumberOne()
         checkResetButtons()
         checkStart()
+        isComma = false
         
         arithmeticButton = tag
         setupButtonCalcPress(tag: tag)
@@ -872,16 +877,16 @@ class CalculatorViewController: UIViewController {
     
     private func checkButtonAc() {
         guard labelClean.text == "AC" else { return }
-        labelResults.text = numberOne.clean()
+        labelResults.text = numberFirst.clean()
     }
     
     private func checkNumberOne() {
-        guard isNumberOne else { return }
-        isNumberOne.toggle()
+        guard isNumberFirst else { return }
+        isNumberFirst.toggle()
     }
     
     private func checkArithmeticOperator() {
-        guard !isNumberOne else { return }
+        guard !isNumberFirst else { return }
         guard arithmeticButton > 0 else { return }
         guard !start else { return }
         runCalculation(tag: arithmeticButton)
@@ -907,16 +912,17 @@ class CalculatorViewController: UIViewController {
         
         checkStart()
         resetNumberOne()
+        isComma = false
     }
     
     private func resetNumberOne() {
-        guard !isNumberOne else { return }
-        isNumberOne.toggle()
+        guard !isNumberFirst else { return }
+        isNumberFirst.toggle()
     }
     
     private func checkNumberTwo() {
-        guard !isNumberOne else { return }
-        numberTwo = setupNumber()
+        guard !isNumberFirst else { return }
+        numberSecond = setupNumber()
         checkResetButtons()
     }
     
@@ -927,27 +933,27 @@ class CalculatorViewController: UIViewController {
     
     private func runCalculation(tag: Int) {
         switch tag {
-        case 1: labelResults.text = calculate(.division).clean()
-        case 2: labelResults.text = calculate(.multiplication).clean()
-        case 3: labelResults.text = calculate(.subtraction).clean()
-        default: labelResults.text = calculate(.addition).clean()
+        case 1: labelResults.text = "\(calculate(.division).clean())"
+        case 2: labelResults.text = "\(calculate(.multiplication).clean())"
+        case 3: labelResults.text = "\(calculate(.subtraction).clean())"
+        default: labelResults.text = "\(calculate(.addition).clean())"
         }
         
-        guard labelResults.text?.count ?? 0 > 9 else { return }
-        let text = String(format: "%e", numberOne)
+        guard labelResults.text?.count ?? 0 > 7 else { return }
+        let text = String(format: "%e", numberFirst)
         labelResults.text = text
     }
     
     private func calculate(_ calculate: Calculate) -> Float {
-        var result = numberOne
+        var result = numberFirst
         
         switch calculate {
-        case .division: result /= numberTwo
-        case .multiplication: result *= numberTwo
-        case .subtraction: result -= numberTwo
-        case .addition: result += numberTwo
+        case .division: result /= numberSecond
+        case .multiplication: result *= numberSecond
+        case .subtraction: result -= numberSecond
+        case .addition: result += numberSecond
         }
-        numberOne = result
+        numberFirst = result
         
         return result
     }
@@ -968,9 +974,24 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func percentCalc() {
-        let value = setupNumber() / 100
+        var value: Float
+        if isNumberFirst {
+            value = setupNumber() / 100
+        } else {
+            value = numberFirst * setupNumber() / 100
+        }
         checkSetupNumber(number: value)
         labelResults.text = "\(value)"
+    }
+    
+    @objc private func comma() {
+        if !start && !isComma {
+            isComma = true
+            let text = labelResults.text ?? ""
+            labelResults.text = text + "."
+        } else if start && !isComma {
+            labelResults.text = "0."
+        }
     }
     
     private func buttonCalcPress(button: UIButton, image: UIImageView) {
@@ -1030,15 +1051,5 @@ extension CalculatorViewController {
         imageView.tintColor = color
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
-    }
-}
-
-extension Float {
-    func clean() -> String {
-        let formatter = NumberFormatter()
-        let number = NSNumber(value: self)
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 8
-        return String(formatter.string(from: number) ?? "")
     }
 }

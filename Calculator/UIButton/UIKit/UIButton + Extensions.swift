@@ -24,7 +24,7 @@ class Button: UIButton {
 
 extension Button {
     func setupButton(backgroundColor: UIColor, cornerRadius: CGFloat,
-               tag: Int? = nil, subview: UIView) -> UIButton {
+                     tag: Int? = nil, subview: UIView) -> UIButton {
         let button = Button(type: .system)
         button.backgroundColor = backgroundColor
         button.layer.cornerRadius = cornerRadius

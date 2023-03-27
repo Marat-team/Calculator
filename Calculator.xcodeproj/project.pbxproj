@@ -10,7 +10,8 @@
 		C3386F1029AF6B530007D52A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3386F0F29AF6B530007D52A /* AppDelegate.swift */; };
 		C3386F1429AF6B530007D52A /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3386F1329AF6B530007D52A /* CalculatorViewController.swift */; };
 		C3386F1929AF6B540007D52A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3386F1829AF6B540007D52A /* Assets.xcassets */; };
-		C34225D229C3692B0064DD8F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34225D129C3692B0064DD8F /* UIButton.swift */; };
+		C34225D229C3692B0064DD8F /* UIButton + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34225D129C3692B0064DD8F /* UIButton + Extensions.swift */; };
+		C384665829D21A2300CB5FA6 /* Float + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384665729D21A2300CB5FA6 /* Float + Extensions.swift */; };
 		C3C97EEA29BB1CC70043FF41 /* Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C97EE929BB1CC70043FF41 /* Calculate.swift */; };
 		C3F3296F29B0B34000113FF3 /* CalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F3296E29B0B34000113FF3 /* CalculatorViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -21,7 +22,8 @@
 		C3386F1329AF6B530007D52A /* CalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewController.swift; sourceTree = "<group>"; };
 		C3386F1829AF6B540007D52A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C3386F1D29AF6B540007D52A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C34225D129C3692B0064DD8F /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		C34225D129C3692B0064DD8F /* UIButton + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extensions.swift"; sourceTree = "<group>"; };
+		C384665729D21A2300CB5FA6 /* Float + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float + Extensions.swift"; sourceTree = "<group>"; };
 		C3C97EE929BB1CC70043FF41 /* Calculate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculate.swift; sourceTree = "<group>"; };
 		C3F3296E29B0B34000113FF3 /* CalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,9 +96,26 @@
 		C34225D329C369380064DD8F /* UIButton */ = {
 			isa = PBXGroup;
 			children = (
-				C34225D129C3692B0064DD8F /* UIButton.swift */,
+				C384665929D21A7E00CB5FA6 /* Foundation */,
+				C384665629D219B100CB5FA6 /* UIKit */,
 			);
 			path = UIButton;
+			sourceTree = "<group>";
+		};
+		C384665629D219B100CB5FA6 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				C34225D129C3692B0064DD8F /* UIButton + Extensions.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		C384665929D21A7E00CB5FA6 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				C384665729D21A2300CB5FA6 /* Float + Extensions.swift */,
+			);
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 		C3C97EEB29BB1CCE0043FF41 /* Model */ = {
@@ -176,9 +195,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C34225D229C3692B0064DD8F /* UIButton.swift in Sources */,
+				C34225D229C3692B0064DD8F /* UIButton + Extensions.swift in Sources */,
 				C3C97EEA29BB1CC70043FF41 /* Calculate.swift in Sources */,
 				C3386F1429AF6B530007D52A /* CalculatorViewController.swift in Sources */,
+				C384665829D21A2300CB5FA6 /* Float + Extensions.swift in Sources */,
 				C3F3296F29B0B34000113FF3 /* CalculatorViewModel.swift in Sources */,
 				C3386F1029AF6B530007D52A /* AppDelegate.swift in Sources */,
 			);
