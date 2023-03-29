@@ -13,6 +13,7 @@
 		C34225D229C3692B0064DD8F /* UIButton + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34225D129C3692B0064DD8F /* UIButton + Extensions.swift */; };
 		C384665829D21A2300CB5FA6 /* Float + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384665729D21A2300CB5FA6 /* Float + Extensions.swift */; };
 		C3C97EEA29BB1CC70043FF41 /* Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C97EE929BB1CC70043FF41 /* Calculate.swift */; };
+		C3E2C89A29D4757C00F28BCE /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E2C89929D4757C00F28BCE /* ColorManager.swift */; };
 		C3F3296F29B0B34000113FF3 /* CalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F3296E29B0B34000113FF3 /* CalculatorViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		C34225D129C3692B0064DD8F /* UIButton + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extensions.swift"; sourceTree = "<group>"; };
 		C384665729D21A2300CB5FA6 /* Float + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float + Extensions.swift"; sourceTree = "<group>"; };
 		C3C97EE929BB1CC70043FF41 /* Calculate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculate.swift; sourceTree = "<group>"; };
+		C3E2C89929D4757C00F28BCE /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		C3F3296E29B0B34000113FF3 /* CalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				C3C97EE929BB1CC70043FF41 /* Calculate.swift */,
+				C3E2C89929D4757C00F28BCE /* ColorManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 			files = (
 				C34225D229C3692B0064DD8F /* UIButton + Extensions.swift in Sources */,
 				C3C97EEA29BB1CC70043FF41 /* Calculate.swift in Sources */,
+				C3E2C89A29D4757C00F28BCE /* ColorManager.swift in Sources */,
 				C3386F1429AF6B530007D52A /* CalculatorViewController.swift in Sources */,
 				C384665829D21A2300CB5FA6 /* Float + Extensions.swift in Sources */,
 				C3F3296F29B0B34000113FF3 /* CalculatorViewModel.swift in Sources */,
