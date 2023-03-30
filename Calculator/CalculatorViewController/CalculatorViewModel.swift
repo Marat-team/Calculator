@@ -18,62 +18,64 @@ protocol CalculatorViewModelProtocol {
     var result: String { get }
     var dataDidChange: ((CalculatorViewModelProtocol) -> Void)? { get set }
     
-    var buttonDivision: UIColor? { get }
-    var buttonMultiplier: UIColor? { get }
-    var buttonSubtract: UIColor? { get }
-    var buttonAdd: UIColor? { get }
+    var buttonDivision: UIColor { get }
+    var buttonMultiplier: UIColor { get }
+    var buttonSubtract: UIColor { get }
+    var buttonAdd: UIColor { get }
     
-    var imageDivision: UIColor? { get }
-    var imageMultiplier: UIColor? { get }
-    var imageSubtract: UIColor? { get }
-    var imageAdd: UIColor? { get }
+    var imageDivision: UIColor { get }
+    var imageMultiplier: UIColor { get }
+    var imageSubtract: UIColor { get }
+    var imageAdd: UIColor { get }
     
     init(start: Bool, isNumberFirst: Bool, numberFirst: Float, numberSecond: Float,
          arithmeticButton: Int, result: String, clean: String, isComma: Bool)
     
+    func buttonCleanInput()
     func buttonNumberInput(tag: Int)
     func plusMinus(text: String)
     func percentCalc(text: String)
     func calc(tag: Int)
+    func comma()
 }
 
 class CalculatorViewModel: CalculatorViewModelProtocol {
-    var buttonDivision: UIColor? {
+    var buttonDivision: UIColor = UIColor.Color.red {
         didSet {
             dataDidChange?(self)
         }
     }
-    var buttonMultiplier: UIColor? {
+    var buttonMultiplier: UIColor = UIColor.Color.red {
         didSet {
             dataDidChange?(self)
         }
     }
-    var buttonSubtract: UIColor? {
+    var buttonSubtract: UIColor = UIColor.Color.red {
         didSet {
             dataDidChange?(self)
         }
     }
-    var buttonAdd: UIColor? {
+    var buttonAdd: UIColor = UIColor.Color.red {
         didSet {
             dataDidChange?(self)
         }
     }
-    var imageDivision: UIColor? {
+    var imageDivision: UIColor = UIColor.Color.white {
         didSet {
             dataDidChange?(self)
         }
     }
-    var imageMultiplier: UIColor? {
+    var imageMultiplier: UIColor = UIColor.Color.white {
         didSet {
             dataDidChange?(self)
         }
     }
-    var imageSubtract: UIColor? {
+    var imageSubtract: UIColor = UIColor.Color.white {
         didSet {
             dataDidChange?(self)
         }
     }
-    var imageAdd: UIColor? {
+    var imageAdd: UIColor = UIColor.Color.white {
         didSet {
             dataDidChange?(self)
         }
@@ -133,6 +135,46 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
         self.result = result
         self.clean = clean
         self.isComma = isComma
+    }
+    
+    func buttonCleanInput() {
+        switch arithmeticButton {
+        case 1...4:
+            buttonCalcPress()
+        default:
+            resetLabelResults()
+        }
+    }
+    
+    private func buttonCalcPress() {
+        if clean == "C" {
+            setupButtonCalcPress()
+            resetLabelResults()
+        } else {
+            checkResetButtons()
+            resetAllConfiguration()
+        }
+    }
+    
+    private func resetLabelResults() {
+        result = "0"
+        checkStart()
+        resetNumberOne()
+        isComma = false
+        
+        guard clean == "C" else { return }
+        clean = "AC"
+    }
+    
+    private func setupButtonCalcPress() {
+        guard !start else { return }
+        setupButtonCalcPress(tag: arithmeticButton)
+    }
+    
+    private func resetAllConfiguration() {
+        arithmeticButton = 0
+        numberFirst = 0
+        numberSecond = 0
     }
     
     func buttonNumberInput(tag: Int) {
@@ -205,6 +247,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
     }
     
     func percentCalc(text: String) {
+        print(text)
         var value: Float
         if isNumberFirst {
             value = convert(text) / 100
@@ -212,7 +255,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
             value = numberFirst * convert(text) / 100
         }
         checkSetupNumber(number: value)
-        result = "\(value)"
+        result = "\(value.clean())"
     }
     
     func calc(tag: Int) {
@@ -336,6 +379,16 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
             buttonAdd = UIColor.Color.white
             imageAdd = UIColor.Color.red
         default: break
+        }
+    }
+    
+    func comma() {
+        if !start && !isComma {
+            isComma = true
+            let text = result
+            result = text + "."
+        } else if start && !isComma {
+            result = "0."
         }
     }
 }

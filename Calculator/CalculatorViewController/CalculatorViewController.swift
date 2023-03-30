@@ -371,7 +371,26 @@ class CalculatorViewController: UIViewController {
     private var viewModel: CalculatorViewModelProtocol! {
         didSet {
             viewModel.dataDidChange = { [unowned self] viewModel in
+                self.start = viewModel.start
+                self.isNumberFirst = viewModel.isNumberFirst
+                self.isComma = viewModel.isComma
+                
+                self.numberFirst = viewModel.numberFirst
+                self.numberSecond = viewModel.numberSecond
+                self.arithmeticButton = viewModel.arithmeticButton
+                
                 self.labelResults.text = viewModel.result
+                self.labelClean.text = viewModel.clean
+                
+                self.buttonDivision.backgroundColor = viewModel.buttonDivision
+                self.buttonMultiplier.backgroundColor = viewModel.buttonMultiplier
+                self.buttonSubtract.backgroundColor = viewModel.buttonSubtract
+                self.buttonAdd.backgroundColor = viewModel.buttonAdd
+                
+                self.imageDivision.tintColor = viewModel.imageDivision
+                self.imageMultiplier.tintColor = viewModel.imageMultiplier
+                self.imageSubtract.tintColor = viewModel.imageSubtract
+                self.imageAdd.tintColor = viewModel.imageAdd
             }
         }
     }
@@ -421,44 +440,15 @@ class CalculatorViewController: UIViewController {
     }
     
     @objc private func buttonAcInput() {
-        switch arithmeticButton {
-        case 1...4:
-            buttonCalcPress()
-        default:
-            resetLabelResults()
-        }
-    }
-    
-    private func buttonCalcPress() {
-        if labelClean.text == "C" {
-            setupButtonCalcPress()
-            resetLabelResults()
-        } else {
-//            checkResetButtons()
-            resetAllConfiguration()
-        }
-    }
-    
-    private func resetLabelResults() {
-        labelResults.text = "0"
-        labelResults.font = UIFont(name: "Kohinoor Bangla", size: 100)
-        checkStart()
-//        resetNumberOne()
-        isComma = false
-        
-        guard labelClean.text == "C" else { return }
-        labelClean.text = "AC"
-    }
-    
-    private func setupButtonCalcPress() {
-        guard !start else { return }
-        setupButtonCalcPress(tag: arithmeticButton)
-    }
-    
-    private func resetAllConfiguration() {
-        arithmeticButton = 0
-        numberFirst = 0
-        numberSecond = 0
+        viewModel = CalculatorViewModel(start: start,
+                                        isNumberFirst: isNumberFirst,
+                                        numberFirst: numberFirst,
+                                        numberSecond: numberSecond,
+                                        arithmeticButton: arithmeticButton,
+                                        result: labelResults.text ?? "",
+                                        clean: labelClean.text ?? "",
+                                        isComma: isComma)
+        viewModel.buttonCleanInput()
     }
     
     @objc private func buttonNumbersInput(button: UIButton) {
@@ -489,56 +479,28 @@ class CalculatorViewController: UIViewController {
         viewModel.calc(tag: button.tag)
     }
     
-    private func checkStart() {
-        guard !start else { return }
-        start.toggle()
-    }
-    
-    private func setupButtonCalcPress(tag: Int) {
-        switch tag {
-        case 1: buttonCalcPress(button: buttonDivision, image: imageDivision)
-        case 2: buttonCalcPress(button: buttonMultiplier, image: imageMultiplier)
-        case 3: buttonCalcPress(button: buttonSubtract, image: imageSubtract)
-        case 4: buttonCalcPress(button: buttonAdd, image: imageAdd)
-        default: break
-        }
-    }
-    
     @objc private func percentCalc() {
+        viewModel = CalculatorViewModel(start: start,
+                                        isNumberFirst: isNumberFirst,
+                                        numberFirst: numberFirst,
+                                        numberSecond: numberSecond,
+                                        arithmeticButton: arithmeticButton,
+                                        result: labelResults.text ?? "",
+                                        clean: labelClean.text ?? "",
+                                        isComma: isComma)
         viewModel.percentCalc(text: labelResults.text ?? "")
     }
     
     @objc private func comma() {
-        if !start && !isComma {
-            isComma = true
-            let text = labelResults.text ?? ""
-            labelResults.text = text + "."
-        } else if start && !isComma {
-            labelResults.text = "0."
-        }
-    }
-    
-    private func buttonCalcPress(button: UIButton, image: UIImageView) {
-        image.tintColor = UIColor(
-            red: 255/255,
-            green: 83/255,
-            blue: 73/255,
-            alpha: 1)
-        button.backgroundColor = .white
-    }
-    
-    private func buttonCalcDefault(buttons: UIButton..., images: UIImageView...) {
-        buttons.forEach { button in
-            button.backgroundColor = UIColor(
-                red: 255/255,
-                green: 83/255,
-                blue: 73/255,
-                alpha: 1)
-        }
-        
-        images.forEach { image in
-            image.tintColor = .white
-        }
+        viewModel = CalculatorViewModel(start: start,
+                                        isNumberFirst: isNumberFirst,
+                                        numberFirst: numberFirst,
+                                        numberSecond: numberSecond,
+                                        arithmeticButton: arithmeticButton,
+                                        result: labelResults.text ?? "",
+                                        clean: labelClean.text ?? "",
+                                        isComma: isComma)
+        viewModel.comma()
     }
 }
 
